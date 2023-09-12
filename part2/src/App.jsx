@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Note from "./components/Note";
 import axios from "axios";
+import myNoteService from './services/notes'
 
 const App = () => {
   // const [notes, setNotes] = useState(props.notes)
@@ -44,28 +45,29 @@ const App = () => {
     ? notes
     : notes.filter((note) => note.important == true);
 
+  
   // const toggleImportanceOf = (note) => {
     
-  //   // console.log(note.id)
-  //   const url = `http://localhost:3001/notes/${note.id}`
-  //   // console.log(url)
-  //   const changedNote = { ...note, important: !(note.important) }
-  //   // console.log(changedNote)
-  //   axios
-  //     .put(url, changedNote)
-  //     .then(response => {
-  //       // console.log(response.data)
-  //       setNotes(notes.map(n => {
-  //         // console.log(n)
-  //         n.id !== note.id ? n : response.data
-  //       }))
-      
-  //     })
-  //     .catch(error => {
-  //       console.error('Error updating note:', error);
-  //     })
+  //     console.log(note)
+  //     const url = `http://localhost:3001/notes/${note.id}`
+  //     // console.log(url)
+  //     const changedNote = { ...note, important: !(note.important) }
+  //     // console.log(changedNote)
+  //     axios
+  //       .put(url, changedNote)
+  //       .then(response => {
+  //         // console.log(response.data)
+  //         setNotes(notes.map(n => {
+  //           // console.log(n)
+  //           n.id !== note.id ? n : response.data
+  //         }))
+        
+  //       })
+  //       .catch(error => {
+  //         console.error('Error updating note:', error);
+  //       })
 
-  //     // console.log(notes)
+  //       // console.log(notes)
   // }
 
   const toggleImportanceOf = id => {
@@ -89,7 +91,7 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map((note) => {
-          // console.log(note.id)
+          // console.log(note)
           return (
             <Note 
               key={note.id} 
