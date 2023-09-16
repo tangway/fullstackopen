@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import Note from "./components/Note";
-// import axios from "axios";
+import Notification from "./components/Notification";
 import myNoteService from './services/notes'
+
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+  return (
+    <div style={footerStyle}>
+      <br />
+      <em>Note app, Department of Computer Science, University of Helsinki 2023</em>
+    </div>
+  )
+}
 
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
-
-  // const hook = () => {
-  //   console.log("effect");
-  //   axios.get("http://localhost:3001/notes").then((res) => {
-  //     console.log("promise fulfilled");
-  //     setNotes(res.data);
-  //   });
-  // };
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     myNoteService
@@ -33,13 +40,6 @@ const App = () => {
       important: Math.random() < 0.5,
     };
 
-    // axios
-    //   .post("http://localhost:3001/notes", noteObject)
-    //   .then((response) => {
-    //     // console.log(response);
-    //     setNotes(notes.concat(response.data));
-    //     setNewNote("");
-    // });
     myNoteService
       .create(noteObject)
       .then(returnedNote => {
@@ -84,13 +84,9 @@ const App = () => {
   // }
 
   const toggleImportanceOf = id => {
-    // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
   
-    // axios.put(url, changedNote).then(response => {
-    //   setNotes(notes.map(n => n.id !== id ? n : response.data))
-    // })
     myNoteService
       .update(id, changedNote)
       .then(returnedNote => {
@@ -98,17 +94,20 @@ const App = () => {
       })
       .catch(error => {
         console.log(error.stack)
-        alert(
-          `the note '${note.content}' was already deleted from server`
+        setErrorMessage(
+          `Note '${note.content}' was already removed from server`
         )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
         setNotes(notes.filter(n => n.id !== id))
       })
   }
 
-  // console.log(notes)
   return (
     <>
       <h1>Notes</h1>
+      <Notification message={errorMessage}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           showing {showAll ? "all" : "important only"}
@@ -129,6 +128,7 @@ const App = () => {
         <input value={newNote} onChange={handleNoteChange} />
         <button type="submit">save</button>
       </form>
+      <Footer/>
     </>
   );
 };

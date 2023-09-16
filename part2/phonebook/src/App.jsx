@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import myContactService from "./services/contact";
+import Notification from "./components/Notification";
 
 const Filter = ({ value, onChange }) => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,14 +87,26 @@ const App = () => {
               })
             );
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setNotificationMessage(`${newName} is not in our database. The full error msg is: ${err.message}`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
+            myContactService.getAll().then((res) => {
+              setPersons(res);
+            })
+          });
       } 
     } else {
         myContactService
           .create(newNameObj)
           .then((response) => {
             console.log(response)
-            setPersons(persons.concat(response));
+            setPersons(persons.concat(response))
+            setNotificationMessage(`${newName} added to the database`)
+            setTimeout(()=>{
+              setNotificationMessage(null)
+            }, 5000)
           })
           .catch((err) => console.log(err));
       }
@@ -123,7 +137,13 @@ const App = () => {
     ) {
       myContactService
         .deleteEntry(id)
-        .then((res) => setPersons(persons.filter((p) => p.id !== id)));
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== id))
+          setNotificationMessage(`${name} has been deleted from the database :O`)
+          setTimeout(()=>{
+            setNotificationMessage(null)
+          }, 5000)
+        });
     }
   };
 
@@ -142,6 +162,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <div>
         <Filter value={searchTerm} onChange={handleSearch} />
       </div>
