@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
 import Note from "./components/Note";
-import axios from "axios";
+// import axios from "axios";
 import myNoteService from './services/notes'
 
 const App = () => {
-  // const [notes, setNotes] = useState(props.notes)
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  const hook = () => {
-    console.log("effect");
-    axios.get("http://localhost:3001/notes").then((res) => {
-      console.log("promise fulfilled");
-      setNotes(res.data);
-    });
-  };
-  useEffect(hook, []);
+  // const hook = () => {
+  //   console.log("effect");
+  //   axios.get("http://localhost:3001/notes").then((res) => {
+  //     console.log("promise fulfilled");
+  //     setNotes(res.data);
+  //   });
+  // };
+
+  useEffect(() => {
+    myNoteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, []);
+  
   console.log("render", notes.length, "notes");
 
   const addNote = (event) => {
@@ -26,13 +33,19 @@ const App = () => {
       important: Math.random() < 0.5,
     };
 
-    axios
-      .post("http://localhost:3001/notes", noteObject)
-      .then((response) => {
-        // console.log(response);
-        setNotes(notes.concat(response.data));
-        setNewNote("");
-    });
+    // axios
+    //   .post("http://localhost:3001/notes", noteObject)
+    //   .then((response) => {
+    //     // console.log(response);
+    //     setNotes(notes.concat(response.data));
+    //     setNewNote("");
+    // });
+    myNoteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
 
   };
 
@@ -71,13 +84,25 @@ const App = () => {
   // }
 
   const toggleImportanceOf = id => {
-    const url = `http://localhost:3001/notes/${id}`
+    // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
   
-    axios.put(url, changedNote).then(response => {
-      setNotes(notes.map(n => n.id !== id ? n : response.data))
-    })
+    // axios.put(url, changedNote).then(response => {
+    //   setNotes(notes.map(n => n.id !== id ? n : response.data))
+    // })
+    myNoteService
+      .update(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+      .catch(error => {
+        console.log(error.stack)
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNotes(notes.filter(n => n.id !== id))
+      })
   }
 
   // console.log(notes)

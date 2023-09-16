@@ -31,4 +31,7 @@ const filtered = persons.filter((p) =>
   p.name.toLowerCase().includes(searchTerm)
 );
 console.log(filtered);
-
+//
+const findPerson = "Arto Hellas"
+const filterForID = persons.filter(p => p.name === findPerson)[0].id
+console.log(filterForID)

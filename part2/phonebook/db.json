@@ -1,16 +1,49 @@
 {
   "contacts": [
-    { "name": "Arto Hellas", "number": "040-123456", "id": 1 },
-    { "name": "Ada Lovelace", "number": "39-44-5323523", "id": 2 },
-    { "name": "Dan Abramov", "number": "12-43-234345", "id": 3 },
-    { "name": "Mary Poppendieck", "number": "39-23-6423122", "id": 4 },
-    { "name": "Horatiod Ambivalance", "number": "000000000000", "id": 5 }
-  ],
-  "comments": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "name": "Arto Hellas",
+      "number": "39-41-437821",
+      "id": 1
+    },
+    {
+      "name": "Ada Lovelace",
+      "number": "39-44-5323523",
+      "id": 2
+    },
+    {
+      "name": "Dan Abramov",
+      "number": "12-43-234345",
+      "id": 3
+    },
+    {
+      "name": "Mary Poppendieck",
+      "number": "39-23-6423122",
+      "id": 4
+    },
+    {
+      "name": "John Abraham",
+      "number": "8981-8927",
+      "id": 5
+    },
+    {
+      "name": "Marie Waclowski",
+      "number": "39-23-3278901",
+      "id": 6
+    },
+    {
+      "name": "Henry da IV",
+      "number": "39-217-28921",
+      "id": 7
+    },
+    {
+      "name": "Joseph da IVIVIV",
+      "number": "39-23982992",
+      "id": 8
+    },
+    {
+      "name": "Oprah Wiffrey",
+      "number": "1111111",
+      "id": 9
     }
   ]
 }
