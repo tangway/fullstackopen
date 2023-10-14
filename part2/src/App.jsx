@@ -58,31 +58,6 @@ const App = () => {
     ? notes
     : notes.filter((note) => note.important == true);
 
-  
-  // const toggleImportanceOf = (note) => {
-    
-  //     console.log(note)
-  //     const url = `http://localhost:3001/notes/${note.id}`
-  //     // console.log(url)
-  //     const changedNote = { ...note, important: !(note.important) }
-  //     // console.log(changedNote)
-  //     axios
-  //       .put(url, changedNote)
-  //       .then(response => {
-  //         // console.log(response.data)
-  //         setNotes(notes.map(n => {
-  //           // console.log(n)
-  //           n.id !== note.id ? n : response.data
-  //         }))
-        
-  //       })
-  //       .catch(error => {
-  //         console.error('Error updating note:', error);
-  //       })
-
-  //       // console.log(notes)
-  // }
-
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }

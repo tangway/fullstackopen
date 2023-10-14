@@ -92,9 +92,9 @@ const App = () => {
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)
-            myContactService.getAll().then((res) => {
-              setPersons(res);
-            })
+            // myContactService.getAll().then((res) => {
+            //   setPersons(res);
+            // })
           });
       } 
     } else {
@@ -157,7 +157,7 @@ const App = () => {
     myContactService.getAll().then((res) => {
       setPersons(res);
     });
-  }, []);
+  }, [persons]);
 
   return (
     <div>
