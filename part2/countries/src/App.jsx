@@ -11,7 +11,7 @@ function App() {
   // const [timeOutId, setTimeOutId] = useState(null);
   // const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const baseurl = "https://studies.cs.helsinki.fi/restcountries/api/";
+  const baseurl = "https://restcountries.com/v3.1";
 
   // const handleSearch = (event) => {
   //     const targetValue = event.target.value;
@@ -58,7 +58,7 @@ function App() {
     const timeOutId = setTimeout(() => {
       if (newSearch !== "") {
         axios
-          .get(`${baseurl}all`)
+          .get(`${baseurl}/all?fields=name`)
           .then((res) => res.data)
           .then((countryList) => {
             return countryList.map((c) => c.name.common);
@@ -83,15 +83,16 @@ function App() {
   // singleCountry useEffect
   useEffect(() => {
     if (singleCountry !== "") {
-      axios.get(`${baseurl}name/${singleCountry}`).then((res) => {
-        // console.log(res.data);
+      axios.get(`${baseurl}/name/${singleCountry}`).then((res) => {
+        console.log(res.data[0]);
 
-        const countryDataCheck = res.data.name;
-        // console.log(countryDataCheck);
+        const countryDataCheck = res.data[0].name;
+        console.log(countryDataCheck);
         if (countryDataCheck) {
-          setCountryData(res.data);
+          setCountryData(res.data[0]);
         }
-      });
+      })
+        .catch(err => console.error(err))
       axios
         .get(
           `https://api.weatherapi.com/v1/current.json?q=${singleCountry}&key=${
@@ -102,7 +103,6 @@ function App() {
           console.log(res.data);
           setWeatherData(res.data);
         });
-        
     }
   }, [singleCountry]);
 
@@ -137,7 +137,9 @@ function App() {
         <div>Independent Country: {data.independent.toString()}</div>
         <div>UN Member: {data.unMember.toString()}</div>
         <div>Region: {data.subregion}</div>
-        <div><b>Capital: {data.capital}</b></div>
+        <div>
+          <b>Capital: {data.capital}</b>
+        </div>
         <div>Population: {data.population.toLocaleString()}</div>
         <div>Area: {data.area.toLocaleString()} km²</div>
         <div>
@@ -161,18 +163,23 @@ function App() {
       <>
         <hr />
         <hr />
-        <h1>Weather in {weatherData.location.name}, {weatherData.location.country} </h1>
-        <div>local time: {weatherData.location.localtime} (24h format)</div>
+        <h1>
+          Weather in {weatherData.location.name}, {weatherData.location.country}
+        </h1>
         <img
           src={weatherData.current.condition.icon}
           style={{ width: "150px" }}
           alt=""
         />
-        <div>{weatherData.current.condition.text}</div>
+        <div>condition: {weatherData.current.condition.text}</div>
+        <div>local time: {weatherData.location.localtime} (24h format)</div>
+        <div>last updated: {weatherData.current.last_updated}</div>
         <br />
-        <div>temp : {weatherData.current.temp_c}C</div>
+        <div>temp: {weatherData.current.temp_c}C</div>
         <div>feels like: {weatherData.current.feelslike_c}C</div>
         <div>humidity: {weatherData.current.humidity}%</div>
+        <div>rain: {weatherData.current.precip_mm}mm</div>
+        <div>visibility: {weatherData.current.vis_km}km</div>
         <div>windspeed: {weatherData.current.wind_kph}/kph</div>
       </>
     );
@@ -180,7 +187,7 @@ function App() {
 
   return (
     <>
-      search:{" "}
+      search:
       <input value={newSearch} onChange={(e) => setNewSearch(e.target.value)} />
       {/* {short circuit AND evaluation where if left is true it stops}  */}
       {newSearch === "" || <ResultList />}
